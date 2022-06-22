@@ -8,7 +8,6 @@ public class Taxi {
     static int id_inc = 0;
     static List<Taxi> FreeTaxi = new ArrayList<>();
     public ArrayList<TaxiOrders> OrdersOfTaxi = new ArrayList<>();
-    private int curr_pos;
     public int id, salary;
     public int travelMin;
 
@@ -25,7 +24,6 @@ public class Taxi {
     public Taxi() {
         this.taxitimes = new ArrayList<>();
         this.id = id_inc;
-        this.curr_pos = 1;
         this.salary = 0;
         this.rest = false;
         id_inc++;
@@ -82,7 +80,7 @@ public class Taxi {
         int minSalary = Integer.MAX_VALUE;
         FreeTaxi.clear();
 
-        int pickUpMin = 0, largestTravelMin = Integer.MAX_VALUE, smallestTravelMin = largestTravelMin;
+        int pickUpMin , largestTravelMin = Integer.MAX_VALUE, smallestTravelMin = largestTravelMin;
         for (Taxi taxi : DBClass.Taxi_List) {
             pickUpMin = Math.abs(start_loc - taxi.getCurr_pos(Time)) * 15;
             System.out.println("startTime " + start_loc + "curr pos" + taxi.getCurr_pos(Time) + "pickUpmin " + pickUpMin);
