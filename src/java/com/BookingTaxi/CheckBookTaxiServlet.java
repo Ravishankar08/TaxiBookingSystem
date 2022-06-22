@@ -37,7 +37,7 @@ public class CheckBookTaxiServlet extends HttpServlet {
             Taxi t1 = new Taxi();
             TaxiOrders order = t1.AllotTaxi(start_loc, drop_loc, date, customer.getName());
             if (order != null) {
-                customer.setCustomerDetails(date,order.getPickUpTime(), order.getDropTime(), order.getFrom(), order.getTo(), order.getTaxiId(), order.getPrice());
+                customer.setCustomerDetails(date,order.getPickUpTime(), order.getDropTime(), order.getFrom(), order.getTo(), order.getTaxiId(), order.getPrice(),order);
                 req.setAttribute("orders", order);
                  req.getRequestDispatcher("OrdersSuccess.jsp").forward(req,res);
 
