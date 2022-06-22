@@ -15,8 +15,6 @@ public class Taxi {
         this.rest = rest;
     }
 
-    
-
     public Taxi() {
         this.taxitimes = new ArrayList<>();
         this.id = id_inc;
@@ -43,7 +41,7 @@ public class Taxi {
 //        for(TaxiTimes taxitime:this.taxitimes){
 //            System.out.println("start"+taxitime.startTime+"End Time"+taxitime.endTime);
 //        }
-        Collections.sort(taxitimes,new sortItems());
+        Collections.sort(taxitimes, new sortItems());
 //        for(TaxiTimes taxitime:this.taxitimes){
 //            System.out.println("start"+taxitime.startTime+"End Time"+taxitime.endTime);
 //        }
@@ -81,7 +79,7 @@ public class Taxi {
         int minSalary = Integer.MAX_VALUE;
         FreeTaxi.clear();
 
-        int pickUpMin , largestTravelMin = Integer.MAX_VALUE, smallestTravelMin = largestTravelMin;
+        int pickUpMin;
         for (Taxi taxi : DBClass.Taxi_List) {
             pickUpMin = Math.abs(start_loc - taxi.getCurr_pos(Time)) * 15;
 //            System.out.println("startTime " + start_loc + "curr pos" + taxi.getCurr_pos(Time) + "pickUpmin " + pickUpMin);
@@ -100,15 +98,12 @@ public class Taxi {
                 new TravelTimeComparator(),
                 new salaryComparator()
         ));
-        
-        
-        
 
-        if (FreeTaxi.isEmpty() ) {
+        if (FreeTaxi.isEmpty()) {
             System.out.println("Sorry No Taxi is Alloted");
             return null;
         }
-        AllotedTaxi=FreeTaxi.get(0);
+        AllotedTaxi = FreeTaxi.get(0);
 //        System.out.println("Calling the check time" + Time + " Allotes Taxi" + AllotedTaxi.getId());
 
         int price = Math.abs(start_loc - stop_loc) * 150;

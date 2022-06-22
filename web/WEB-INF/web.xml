@@ -16,15 +16,13 @@
         <url-pattern>/OrdersSuccess.jsp</url-pattern>
         <url-pattern>/checkBook</url-pattern>
     </filter-mapping>
-    
     <filter-mapping>
         <filter-name>AdminPassFilter</filter-name>
         <url-pattern>/ShowUser.jsp</url-pattern>
         <url-pattern>/ShowTaxi.jsp</url-pattern>
         <url-pattern>/Admin_Flow.jsp</url-pattern>
-         <url-pattern>/RestTaxiServlet</url-pattern>
+        <url-pattern>/RestTaxiServlet</url-pattern>
     </filter-mapping>
-    
     <servlet>
         <servlet-name>AddCustomer</servlet-name>
         <servlet-class>com.BookingTaxi.AddCustomerServlet</servlet-class>

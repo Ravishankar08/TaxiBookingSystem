@@ -31,7 +31,7 @@ public class CheckBookTaxiServlet extends HttpServlet {
             rd.forward(req, res);
             System.out.println("Same values");
         } else {
-            session = req.getSession();
+            session = req.getSession(false);
             Customer customer = (Customer) session.getAttribute("curr_user");
             try{
             Taxi t1 = new Taxi();
@@ -43,7 +43,8 @@ public class CheckBookTaxiServlet extends HttpServlet {
 
             } else {
                 res.getWriter().println("Sorry No taxi available at this moment");
-            }}
+            }
+            }
             catch(Exception e){
                 System.out.println("Exception at checkNookTaxi  : "+e+" "+e.getStackTrace()[0].getLineNumber());
             }
