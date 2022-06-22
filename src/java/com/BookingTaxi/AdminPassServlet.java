@@ -14,18 +14,20 @@ public class AdminPassServlet extends HttpServlet {
                     session.setAttribute("isAdminLogged", true);
                     res.sendRedirect("Admin_Flow.jsp");
                 } else {
-                    System.out.println("Password doesnot match");
+//                    System.out.println("Password doesnot match");
                     req.setAttribute("AdminErr", "Admin Password Invalid");
                     req.getRequestDispatcher("Admin_Pass.jsp").forward(req, res);
                 }
             } else {
-                System.out.println("No user Found");
-                req.setAttribute("AdminErr", "Admin Password Invalid");
+                req.setAttribute("AdminErr", "Please Login To continue");
                 req.getRequestDispatcher("Admin_Pass.jsp").forward(req, res);
             }
         } catch (Exception e) {
             System.out.println("Exception at AdminPassServlet : " + e);
         }
 
+    }
+    public void doGet(HttpServletRequest req, HttpServletResponse res){
+        doPost(req,res);
     }
 }

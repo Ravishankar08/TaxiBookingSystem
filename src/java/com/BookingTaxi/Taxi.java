@@ -7,7 +7,7 @@ public class Taxi {
     ArrayList<TaxiTimes> taxitimes;
     static int id_inc = 0;
     static List<Taxi> FreeTaxi = new ArrayList<>();
-    public ArrayList<TaxiOrders> OrdersOfTaxi;
+    public ArrayList<TaxiOrders> OrdersOfTaxi = new ArrayList<>();
     public int id, salary;
     public int travelMin;
 
@@ -15,14 +15,9 @@ public class Taxi {
         this.rest = rest;
     }
 
-    public static void sort(ArrayList<TaxiTimes> list) {
-        list.sort((o1, o2)
-                -> o1.startTime.compareTo(
-                        o2.startTime));
-    }
+    
 
     public Taxi() {
-        this.OrdersOfTaxi = new ArrayList<>();
         this.taxitimes = new ArrayList<>();
         this.id = id_inc;
         this.salary = 0;
@@ -41,12 +36,17 @@ public class Taxi {
     }
 
     public int getCurr_pos(Date time) {
-        System.out.println("The time reqyested is " + time);
+//        System.out.println("The time reqyested is " + time);
         if (taxitimes.isEmpty()) {
             return 1;
         }
-        sort(taxitimes);
-        System.out.println(taxitimes);
+//        for(TaxiTimes taxitime:this.taxitimes){
+//            System.out.println("start"+taxitime.startTime+"End Time"+taxitime.endTime);
+//        }
+        Collections.sort(taxitimes,new sortItems());
+//        for(TaxiTimes taxitime:this.taxitimes){
+//            System.out.println("start"+taxitime.startTime+"End Time"+taxitime.endTime);
+//        }
         TaxiOrders order = null;
         for (TaxiTimes taxitime : this.taxitimes) {
             if (time.before(taxitime.startTime)) {
@@ -61,10 +61,10 @@ public class Taxi {
             }
         }
         if (order == null) {
-            System.out.println("ALL orders are above " + time);
+//            System.out.println("ALL orders are above " + time);
             return 1;
         }
-        System.out.println("If Near Order" + order.getTo());
+//        System.out.println("If Near Order" + order.getTo());
         return order.getTo();
     }
 
@@ -78,41 +78,45 @@ public class Taxi {
 
     public TaxiOrders AllotTaxi(int start_loc, int stop_loc, Date Time, String Username) {
         TaxiOrders order = new TaxiOrders();
+        int minSalary = Integer.MAX_VALUE;
         FreeTaxi.clear();
 
-        int pickUpMin;
+        int pickUpMin , largestTravelMin = Integer.MAX_VALUE, smallestTravelMin = largestTravelMin;
         for (Taxi taxi : DBClass.Taxi_List) {
             pickUpMin = Math.abs(start_loc - taxi.getCurr_pos(Time)) * 15;
 //            System.out.println("startTime " + start_loc + "curr pos" + taxi.getCurr_pos(Time) + "pickUpmin " + pickUpMin);
             taxi.travelMin = pickUpMin + Math.abs(start_loc - stop_loc) * 15;
-            System.out.println("travelMin " + taxi.travelMin);
+//            System.out.println("travelMin " + taxi.travelMin);
 
         }
 
-        Taxi AllotedTaxi;
+        Taxi AllotedTaxi = null;
         for (Taxi taxi : DBClass.Taxi_List) {
             if (taxi.check(Time, taxi.travelMin)) {
                 FreeTaxi.add(taxi);
             }
         }
-        
-        if (FreeTaxi.isEmpty() ) {
-            System.out.println("Sorry No Taxi is Free Now");
-            return null;
-        }
         Collections.sort(FreeTaxi, new MyComparator(
                 new TravelTimeComparator(),
                 new salaryComparator()
         ));
+        
+        
+        
+
+        if (FreeTaxi.isEmpty() ) {
+            System.out.println("Sorry No Taxi is Alloted");
+            return null;
+        }
         AllotedTaxi=FreeTaxi.get(0);
 //        System.out.println("Calling the check time" + Time + " Allotes Taxi" + AllotedTaxi.getId());
+
         int price = Math.abs(start_loc - stop_loc) * 150;
         int orderloss = Math.abs(AllotedTaxi.getCurr_pos(Time) - start_loc) * 75;
         AllotedTaxi.salary += price - orderloss;
         Date dropTime = new Date(Time.getTime() + (AllotedTaxi.travelMin * 60 * 1000));
         pickUpMin = Math.abs(start_loc - AllotedTaxi.getCurr_pos(Time)) * 15;
-        Date pickUpTime=new Date(Time.getTime() + (pickUpMin * 60 * 1000));
-        order.setValues(AllotedTaxi.getId(), start_loc, stop_loc, price, Time, pickUpTime, dropTime, Username, orderloss);
+        order.setValues(AllotedTaxi.getId(), start_loc, stop_loc, price, Time, new Date(Time.getTime() + (pickUpMin * 60 * 1000)), dropTime, Username, orderloss);
         AllotedTaxi.OrdersOfTaxi.add(order);
         TaxiTimes taxitime = new TaxiTimes();
         taxitime.startTime = Time;
@@ -130,25 +134,24 @@ public class Taxi {
         Date dropTime = new Date(ReqTime.getTime() + (travelMin) * 60 * 1000);
 //        System.out.println("startTime : " + ReqTime + "tarvel Min : " + travelMin + " DropTime ; " + dropTime);
 //        System.out.println(taxitimes);
-
-        if (!this.taxitimes.isEmpty() ) {
-            System.out.println("taxitmes empty");
+        if (this.taxitimes.isEmpty()) {
+//            System.out.println("taxitmes empty");
             return true;
         }
         if (this.rest) {
-            System.out.println("taxi i s ata rest");
+//            System.out.println("taxi i s ata rest");
             return false;
         }
 
         for (TaxiTimes taxitime : this.taxitimes) {
             check = 0;
-            System.out.println("here in check");
-            System.out.println("taxi Requested Time" + ReqTime.toString() + "taxi endTime:" + taxitime.endTime.toString() + " Start time: " + taxitime.startTime.toString());
+//            System.out.println("here in check");
+//            System.out.println("taxi Requested Time" + ReqTime.toString() + "taxi endTime:" + taxitime.endTime.toString() + " Start time: " + taxitime.startTime.toString());
             if (!(ReqTime.after(taxitime.endTime) || dropTime.before(taxitime.startTime))) {
 //                System.out.println("inside");
                 check = 1;
             } else {
-                System.out.println("Outside");
+//                System.out.println("Outside");
             }
 
         }

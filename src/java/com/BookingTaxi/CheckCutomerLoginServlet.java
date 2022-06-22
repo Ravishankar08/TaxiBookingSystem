@@ -36,6 +36,13 @@ public class CheckCutomerLoginServlet extends HttpServlet {
                 req.getRequestDispatcher("index.jsp").forward(req, res);
             }
         }
+        else{
+            req.setAttribute("loginErr", "Please login to continue");
+            req.getRequestDispatcher("index.jsp").forward(req, res);
+        }
+    }
+    public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException{
+        doPost(req,res);
     }
 
 }
